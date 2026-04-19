@@ -1,0 +1,7 @@
+node_modules/
+js/
+.vite/
+CLAUDE.md
+CLAUDE_MESSAGE.md
+NEW_APP_BOOTSTRAP_PROMPT.md
+.claude/
