@@ -21,6 +21,8 @@ export default defineConfig({
 				entryFileNames: `${appName}-[name].js`,
 				chunkFileNames: `${appName}-[name].js`,
 				assetFileNames: `${appName}-[name].[ext]`,
+				format: 'iife',
+				inlineDynamicImports: true,
 			},
 		},
 		cssCodeSplit: false,

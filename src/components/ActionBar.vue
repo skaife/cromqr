@@ -1,12 +1,7 @@
 <template>
 	<div class="action-bar">
-		<div v-if="!isSaved && !hasName" class="name-input">
-			<NcTextField label="Name this QR code"
-				:modelValue="name"
-				@update:modelValue="$emit('update:name', $event)" />
-		</div>
-		<div v-else-if="isSaved" class="name-input">
-			<NcTextField label="Name"
+		<div class="name-input">
+			<NcTextField :label="isSaved ? 'Name' : 'Name this QR code'"
 				:modelValue="name"
 				@update:modelValue="$emit('update:name', $event)" />
 		</div>
@@ -57,7 +52,7 @@
 
 <script>
 import { NcButton, NcDialog, NcTextField } from '@nextcloud/vue'
-import { ref, computed } from 'vue'
+import { ref } from 'vue'
 
 export default {
 	name: 'ActionBar',
@@ -70,8 +65,6 @@ export default {
 	emits: ['save', 'export', 'download-svg', 'download-png', 'delete', 'update:name'],
 	setup(props, { emit }) {
 		const showDeleteDialog = ref(false)
-		const hasName = computed(() => !!props.name)
-
 		function confirmDelete() {
 			showDeleteDialog.value = true
 		}
@@ -81,7 +74,7 @@ export default {
 			emit('delete')
 		}
 
-		return { showDeleteDialog, hasName, confirmDelete, doDelete }
+		return { showDeleteDialog, confirmDelete, doDelete }
 	},
 }
 </script>

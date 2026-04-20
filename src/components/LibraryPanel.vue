@@ -1,7 +1,7 @@
 <template>
 	<NcAppNavigation>
 		<template #list>
-			<NcAppNavigationNew :text="'New QR Code'" @new="$emit('new-entry')" />
+			<NcAppNavigationNew :text="'New QR Code'" @click="$emit('new-entry')" />
 			<div class="library-controls">
 				<NcButton type="tertiary"
 					:aria-label="viewMode === 'list' ? 'Switch to grid view' : 'Switch to list view'"

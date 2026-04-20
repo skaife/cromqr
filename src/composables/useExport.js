@@ -1,17 +1,34 @@
 import axios from '@nextcloud/axios'
 import { generateUrl } from '@nextcloud/router'
-import { getFilePickerBuilder } from '@nextcloud/dialogs'
 
 export function useExport() {
 	async function exportToFiles(imageDataUrl, name) {
 		try {
-			const picker = getFilePickerBuilder('Choose export destination')
-				.setType(1)
-				.setMimeTypeFilter(['httpd/unix-directory'])
-				.allowDirectories()
-				.build()
-
-			const destination = await picker.pick()
+			const destination = await new Promise((resolve, reject) => {
+				let picked = false
+				window.OC.dialogs.filepicker(
+					'Choose export destination',
+					(path) => {
+						picked = true
+						resolve(path)
+					},
+					false,
+					['httpd/unix-directory'],
+					true,
+					1,
+				)
+				const observer = new MutationObserver(() => {
+					if (!document.querySelector('.oc-dialog')) {
+						observer.disconnect()
+						if (!picked) {
+							reject(new Error('Pick cancelled'))
+						}
+					}
+				})
+				setTimeout(() => {
+					observer.observe(document.body, { childList: true, subtree: true })
+				}, 500)
+			})
 
 			const url = generateUrl('/apps/cromqr/export')
 			await axios.post(url, {

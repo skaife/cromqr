@@ -46,6 +46,7 @@ import GeoForm from './forms/GeoForm.vue'
 import { useQrGenerator } from '../composables/useQrGenerator.js'
 import { useExport } from '../composables/useExport.js'
 import { buildPayload } from '../composables/payloadBuilder.js'
+import { generateUUID } from '../utils/uuid.js'
 
 const FORM_MAP = {
 	url: UrlForm,
@@ -115,7 +116,7 @@ export default {
 
 		function onSave() {
 			const data = {
-				$id: props.entry?.$id || crypto.randomUUID(),
+				$id: props.entry?.$id || self.crypto?.randomUUID?.() || generateUUID(),
 				name: name.value,
 				dataType: dataType.value,
 				payload: payload.value,

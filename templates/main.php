@@ -1,6 +1,6 @@
 <?php
 
-\OCP\Util::addStyle('cromqr', '../js/cromqr-main');
+\OCP\Util::addStyle('cromqr', '../js/cromqr-style');
 
 ?>
 <div id="app-content">

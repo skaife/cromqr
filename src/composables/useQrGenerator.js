@@ -47,8 +47,13 @@ export function useQrGenerator() {
 
 	async function downloadPng(payload, style, name) {
 		const dataUrl = await generatePngDataUrl(payload, style)
-		const response = await fetch(dataUrl)
-		const blob = await response.blob()
+		const parts = dataUrl.split(',')
+		const byteString = atob(parts[1])
+		const bytes = new Uint8Array(byteString.length)
+		for (let i = 0; i < byteString.length; i++) {
+			bytes[i] = byteString.charCodeAt(i)
+		}
+		const blob = new Blob([bytes], { type: 'image/png' })
 		triggerDownload(blob, `${name}.png`)
 	}
 
