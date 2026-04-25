@@ -19,7 +19,7 @@ Generate QR codes from seven data types — URLs, plain text, contact cards (vCa
 - Per-user isolation — each user has their own private library
 - Fully client-side QR generation — no external services
     ]]></description>
-    <version>1.0.0</version>
+    <version>1.0.1</version>
     <licence>agpl</licence>
     <author mail="crom@skaife.org" homepage="https://github.com/skaife">Scott Skaife</author>
     <namespace>CromQR</namespace>
@@ -27,6 +27,8 @@ Generate QR codes from seven data types — URLs, plain text, contact cards (vCa
     <website>https://github.com/skaife/cromqr</website>
     <bugs>https://github.com/skaife/cromqr/issues</bugs>
     <repository>https://github.com/skaife/cromqr</repository>
+    <screenshot>https://raw.githubusercontent.com/skaife/cromqr/main/screenshots/CromQR-New.png</screenshot>
+    <screenshot>https://raw.githubusercontent.com/skaife/cromqr/main/screenshots/CromQR-URL.png</screenshot>
     <dependencies>
         <nextcloud min-version="32" max-version="33"/>
     </dependencies>
