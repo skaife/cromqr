@@ -1,16 +1,18 @@
 <template>
 	<div>
-		<label class="form-label">Text</label>
+		<label class="form-label">{{ t('cromqr', 'Text') }}</label>
 		<textarea
 			class="form-textarea"
 			:value="fields.text || ''"
-			placeholder="Enter text..."
+			:placeholder="t('cromqr', 'Enter text...')"
 			rows="5"
 			@input="update('text', $event.target.value)" />
 	</div>
 </template>
 
 <script>
+import { t } from '@nextcloud/l10n'
+
 export default {
 	name: 'TextForm',
 	props: {
@@ -21,7 +23,7 @@ export default {
 		function update(key, value) {
 			emit('update:fields', { ...props.fields, [key]: value })
 		}
-		return { update }
+		return { update, t }
 	},
 }
 </script>

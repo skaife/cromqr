@@ -1,10 +1,10 @@
 <template>
 	<NcAppNavigation>
 		<template #list>
-			<NcAppNavigationNew :text="'New QR Code'" @click="$emit('new-entry')" />
+			<NcAppNavigationNew :text="t('cromqr', 'New QR Code')" @click="$emit('new-entry')" />
 			<div class="library-controls">
 				<NcButton type="tertiary"
-					:aria-label="viewMode === 'list' ? 'Switch to grid view' : 'Switch to list view'"
+					:aria-label="viewMode === 'list' ? t('cromqr', 'Switch to grid view') : t('cromqr', 'Switch to list view')"
 					@click="toggleView">
 					<template #icon>
 						<ViewGrid v-if="viewMode === 'list'" :size="20" />
@@ -16,8 +16,8 @@
 				<NcLoadingIcon />
 			</template>
 			<template v-else-if="entries.length === 0">
-				<NcEmptyContent name="No QR codes yet"
-					description="Click '+ New QR Code' to create one">
+				<NcEmptyContent :name="t('cromqr', 'No QR codes yet')"
+					:description="emptyDescription">
 					<template #icon>
 						<QrCode :size="64" />
 					</template>
@@ -47,6 +47,7 @@
 
 <script>
 import { NcAppNavigation, NcAppNavigationNew, NcButton, NcLoadingIcon, NcEmptyContent } from '@nextcloud/vue'
+import { t } from '@nextcloud/l10n'
 import LibraryItem from './LibraryItem.vue'
 import LibraryItemGrid from './LibraryItemGrid.vue'
 import ViewGrid from 'vue-material-design-icons/ViewGrid.vue'
@@ -77,13 +78,14 @@ export default {
 	setup() {
 		const stored = typeof localStorage !== 'undefined' ? localStorage.getItem('cromqr-view') : null
 		const viewMode = ref(stored || 'list')
+		const emptyDescription = t('cromqr', "Click '+ New QR Code' to create one")
 
 		function toggleView() {
 			viewMode.value = viewMode.value === 'list' ? 'grid' : 'list'
 			localStorage.setItem('cromqr-view', viewMode.value)
 		}
 
-		return { viewMode, toggleView }
+		return { viewMode, toggleView, emptyDescription, t }
 	},
 }
 </script>

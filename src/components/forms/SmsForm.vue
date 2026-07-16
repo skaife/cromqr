@@ -1,10 +1,10 @@
 <template>
 	<div class="sms-form">
-		<NcTextField label="Phone Number"
+		<NcTextField :label="t('cromqr', 'Phone Number')"
 			:modelValue="fields.phone || ''"
 			placeholder="+1234567890"
 			@update:modelValue="update('phone', $event)" />
-		<label class="form-label">Message</label>
+		<label class="form-label">{{ t('cromqr', 'Message') }}</label>
 		<textarea
 			class="form-textarea"
 			:value="fields.message || ''"
@@ -15,6 +15,7 @@
 
 <script>
 import { NcTextField } from '@nextcloud/vue'
+import { t } from '@nextcloud/l10n'
 
 export default {
 	name: 'SmsForm',
@@ -27,7 +28,7 @@ export default {
 		function update(key, value) {
 			emit('update:fields', { ...props.fields, [key]: value })
 		}
-		return { update }
+		return { update, t }
 	},
 }
 </script>

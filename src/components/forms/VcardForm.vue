@@ -1,24 +1,24 @@
 <template>
 	<div class="vcard-form">
-		<NcTextField label="First Name"
+		<NcTextField :label="t('cromqr', 'First Name')"
 			:modelValue="fields.firstName || ''"
 			@update:modelValue="update('firstName', $event)" />
-		<NcTextField label="Last Name"
+		<NcTextField :label="t('cromqr', 'Last Name')"
 			:modelValue="fields.lastName || ''"
 			@update:modelValue="update('lastName', $event)" />
-		<NcTextField label="Phone"
+		<NcTextField :label="t('cromqr', 'Phone')"
 			:modelValue="fields.phone || ''"
 			@update:modelValue="update('phone', $event)" />
-		<NcTextField label="Email"
+		<NcTextField :label="t('cromqr', 'Email')"
 			:modelValue="fields.email || ''"
 			@update:modelValue="update('email', $event)" />
-		<NcTextField label="Organization"
+		<NcTextField :label="t('cromqr', 'Organization')"
 			:modelValue="fields.org || ''"
 			@update:modelValue="update('org', $event)" />
-		<NcTextField label="Title"
+		<NcTextField :label="t('cromqr', 'Title')"
 			:modelValue="fields.title || ''"
 			@update:modelValue="update('title', $event)" />
-		<NcTextField label="Website"
+		<NcTextField :label="t('cromqr', 'Website')"
 			:modelValue="fields.website || ''"
 			@update:modelValue="update('website', $event)" />
 	</div>
@@ -26,6 +26,7 @@
 
 <script>
 import { NcTextField } from '@nextcloud/vue'
+import { t } from '@nextcloud/l10n'
 
 export default {
 	name: 'VcardForm',
@@ -38,7 +39,7 @@ export default {
 		function update(key, value) {
 			emit('update:fields', { ...props.fields, [key]: value })
 		}
-		return { update }
+		return { update, t }
 	},
 }
 </script>

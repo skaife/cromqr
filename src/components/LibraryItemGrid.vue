@@ -1,11 +1,12 @@
 <template>
 	<div class="grid-item" :class="{ selected }" @click="$emit('click')">
 		<QrPreviewMini :payload="entry.payload" :style-opts="entry.style" />
-		<span class="grid-item-name">{{ entry.name || 'Untitled' }}</span>
+		<span class="grid-item-name">{{ entry.name || t('cromqr', 'Untitled') }}</span>
 	</div>
 </template>
 
 <script>
+import { t } from '@nextcloud/l10n'
 import QrPreviewMini from './QrPreviewMini.vue'
 
 export default {
@@ -16,6 +17,9 @@ export default {
 		selected: { type: Boolean, default: false },
 	},
 	emits: ['click'],
+	setup() {
+		return { t }
+	},
 }
 </script>
 

@@ -1,21 +1,21 @@
 <template>
 	<div class="wifi-form">
-		<NcTextField label="SSID (Network Name)"
+		<NcTextField :label="t('cromqr', 'SSID (Network Name)')"
 			:modelValue="fields.ssid || ''"
 			@update:modelValue="update('ssid', $event)" />
-		<NcTextField label="Password"
+		<NcTextField :label="t('cromqr', 'Password')"
 			:modelValue="fields.password || ''"
 			@update:modelValue="update('password', $event)" />
 
 		<fieldset class="security-fieldset">
-			<legend>Security Type</legend>
+			<legend>{{ t('cromqr', 'Security Type') }}</legend>
 			<NcCheckboxRadioSwitch
 				:model-value="fields.security || 'WPA'"
 				value="WPA"
 				name="security"
 				type="radio"
 				@update:model-value="update('security', $event)">
-				WPA/WPA2
+				{{ t('cromqr', 'WPA/WPA2') }}
 			</NcCheckboxRadioSwitch>
 			<NcCheckboxRadioSwitch
 				:model-value="fields.security || 'WPA'"
@@ -23,7 +23,7 @@
 				name="security"
 				type="radio"
 				@update:model-value="update('security', $event)">
-				WEP
+				{{ t('cromqr', 'WEP') }}
 			</NcCheckboxRadioSwitch>
 			<NcCheckboxRadioSwitch
 				:model-value="fields.security || 'WPA'"
@@ -31,7 +31,7 @@
 				name="security"
 				type="radio"
 				@update:model-value="update('security', $event)">
-				None
+				{{ t('cromqr', 'None') }}
 			</NcCheckboxRadioSwitch>
 		</fieldset>
 	</div>
@@ -39,6 +39,7 @@
 
 <script>
 import { NcTextField, NcCheckboxRadioSwitch } from '@nextcloud/vue'
+import { t } from '@nextcloud/l10n'
 
 export default {
 	name: 'WifiForm',
@@ -51,7 +52,7 @@ export default {
 		function update(key, value) {
 			emit('update:fields', { ...props.fields, [key]: value })
 		}
-		return { update }
+		return { update, t }
 	},
 }
 </script>

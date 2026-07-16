@@ -4,13 +4,14 @@
 			:key="dt.key"
 			:type="modelValue === dt.key ? 'primary' : 'secondary'"
 			@click="$emit('update:modelValue', dt.key)">
-			{{ dt.label }}
+			{{ t('cromqr', dt.label) }}
 		</NcButton>
 	</div>
 </template>
 
 <script>
 import { NcButton } from '@nextcloud/vue'
+import { t } from '@nextcloud/l10n'
 import { DATA_TYPES } from '../constants.js'
 
 export default {
@@ -21,7 +22,7 @@ export default {
 	},
 	emits: ['update:modelValue'],
 	setup() {
-		return { DATA_TYPES }
+		return { DATA_TYPES, t }
 	},
 }
 </script>

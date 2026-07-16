@@ -1,13 +1,13 @@
 <template>
 	<div class="email-form">
-		<NcTextField label="To"
+		<NcTextField :label="t('cromqr', 'To')"
 			:modelValue="fields.to || ''"
 			placeholder="recipient@example.com"
 			@update:modelValue="update('to', $event)" />
-		<NcTextField label="Subject"
+		<NcTextField :label="t('cromqr', 'Subject')"
 			:modelValue="fields.subject || ''"
 			@update:modelValue="update('subject', $event)" />
-		<label class="form-label">Body</label>
+		<label class="form-label">{{ t('cromqr', 'Body') }}</label>
 		<textarea
 			class="form-textarea"
 			:value="fields.body || ''"
@@ -18,6 +18,7 @@
 
 <script>
 import { NcTextField } from '@nextcloud/vue'
+import { t } from '@nextcloud/l10n'
 
 export default {
 	name: 'EmailForm',
@@ -30,7 +31,7 @@ export default {
 		function update(key, value) {
 			emit('update:fields', { ...props.fields, [key]: value })
 		}
-		return { update }
+		return { update, t }
 	},
 }
 </script>

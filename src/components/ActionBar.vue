@@ -1,7 +1,7 @@
 <template>
 	<div class="action-bar">
 		<div class="name-input">
-			<NcTextField :label="isSaved ? 'Name' : 'Name this QR code'"
+			<NcTextField :label="isSaved ? t('cromqr', 'Name') : t('cromqr', 'Name this QR code')"
 				:modelValue="name"
 				@update:modelValue="$emit('update:name', $event)" />
 		</div>
@@ -10,40 +10,40 @@
 			<NcButton type="primary"
 				:disabled="!hasPayload"
 				@click="$emit('save')">
-				{{ isSaved ? 'Update' : 'Save to Library' }}
+				{{ isSaved ? t('cromqr', 'Update') : t('cromqr', 'Save to Library') }}
 			</NcButton>
 			<NcButton type="secondary"
 				:disabled="!hasPayload"
 				@click="$emit('export')">
-				Export to Files
+				{{ t('cromqr', 'Export to Files') }}
 			</NcButton>
 			<NcButton type="secondary"
 				:disabled="!hasPayload"
 				@click="$emit('download-svg')">
-				Download SVG
+				{{ t('cromqr', 'Download SVG') }}
 			</NcButton>
 			<NcButton type="secondary"
 				:disabled="!hasPayload"
 				@click="$emit('download-png')">
-				Download PNG
+				{{ t('cromqr', 'Download PNG') }}
 			</NcButton>
 			<NcButton v-if="isSaved"
 				type="error"
 				@click="confirmDelete">
-				Delete
+				{{ t('cromqr', 'Delete') }}
 			</NcButton>
 		</div>
 
 		<NcDialog v-if="showDeleteDialog"
-			name="Delete QR Code"
-			:message="'Are you sure you want to delete this QR code?'"
+			:name="t('cromqr', 'Delete QR Code')"
+			:message="t('cromqr', 'Are you sure you want to delete this QR code?')"
 			@close="showDeleteDialog = false">
 			<template #actions>
 				<NcButton type="secondary" @click="showDeleteDialog = false">
-					Cancel
+					{{ t('cromqr', 'Cancel') }}
 				</NcButton>
 				<NcButton type="error" @click="doDelete">
-					Delete
+					{{ t('cromqr', 'Delete') }}
 				</NcButton>
 			</template>
 		</NcDialog>
@@ -52,6 +52,7 @@
 
 <script>
 import { NcButton, NcDialog, NcTextField } from '@nextcloud/vue'
+import { t } from '@nextcloud/l10n'
 import { ref } from 'vue'
 
 export default {
@@ -74,7 +75,7 @@ export default {
 			emit('delete')
 		}
 
-		return { showDeleteDialog, confirmDelete, doDelete }
+		return { showDeleteDialog, confirmDelete, doDelete, t }
 	},
 }
 </script>

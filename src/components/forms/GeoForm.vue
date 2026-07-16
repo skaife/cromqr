@@ -1,14 +1,14 @@
 <template>
 	<div class="geo-form">
-		<NcTextField label="Latitude"
+		<NcTextField :label="t('cromqr', 'Latitude')"
 			:modelValue="fields.lat || ''"
 			placeholder="40.7128"
 			@update:modelValue="update('lat', $event)" />
-		<NcTextField label="Longitude"
+		<NcTextField :label="t('cromqr', 'Longitude')"
 			:modelValue="fields.lng || ''"
 			placeholder="-74.0060"
 			@update:modelValue="update('lng', $event)" />
-		<NcTextField label="Label (optional)"
+		<NcTextField :label="t('cromqr', 'Label (optional)')"
 			:modelValue="fields.label || ''"
 			@update:modelValue="update('label', $event)" />
 	</div>
@@ -16,6 +16,7 @@
 
 <script>
 import { NcTextField } from '@nextcloud/vue'
+import { t } from '@nextcloud/l10n'
 
 export default {
 	name: 'GeoForm',
@@ -28,7 +29,7 @@ export default {
 		function update(key, value) {
 			emit('update:fields', { ...props.fields, [key]: value })
 		}
-		return { update }
+		return { update, t }
 	},
 }
 </script>

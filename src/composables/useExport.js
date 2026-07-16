@@ -1,5 +1,6 @@
 import axios from '@nextcloud/axios'
 import { generateUrl } from '@nextcloud/router'
+import { t } from '@nextcloud/l10n'
 
 export function useExport() {
 	async function exportToFiles(imageDataUrl, name) {
@@ -7,7 +8,7 @@ export function useExport() {
 			const destination = await new Promise((resolve, reject) => {
 				let picked = false
 				window.OC.dialogs.filepicker(
-					'Choose export destination',
+					t('cromqr', 'Choose export destination'),
 					(path) => {
 						picked = true
 						resolve(path)

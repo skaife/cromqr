@@ -21,6 +21,7 @@ class PageController extends Controller {
 	 */
 	public function index(): TemplateResponse {
 		Util::addScript(Application::APP_ID, 'cromqr-main');
+		Util::addTranslations(Application::APP_ID);
 		return new TemplateResponse(Application::APP_ID, 'main');
 	}
 }

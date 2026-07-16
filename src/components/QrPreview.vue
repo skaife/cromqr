@@ -3,17 +3,17 @@
 		<div class="qr-preview-container">
 			<div v-if="payload" class="qr-preview" v-html="svgContent" />
 			<div v-else class="qr-placeholder">
-				Enter data to generate a QR code
+				{{ t('cromqr', 'Enter data to generate a QR code') }}
 			</div>
 		</div>
 
 		<div class="style-controls">
 			<label class="color-control">
-				<span>Foreground</span>
+				<span>{{ t('cromqr', 'Foreground') }}</span>
 				<input type="color" :value="fgColor" @input="$emit('update:fgColor', $event.target.value)">
 			</label>
 			<label class="color-control">
-				<span>Background</span>
+				<span>{{ t('cromqr', 'Background') }}</span>
 				<input type="color" :value="bgColor" @input="$emit('update:bgColor', $event.target.value)">
 			</label>
 		</div>
@@ -22,6 +22,7 @@
 
 <script>
 import { ref, watch } from 'vue'
+import { t } from '@nextcloud/l10n'
 import QRCode from 'qrcode'
 
 export default {
@@ -62,7 +63,7 @@ export default {
 
 		watch(() => [props.payload, props.fgColor, props.bgColor], generate, { immediate: true })
 
-		return { svgContent }
+		return { svgContent, t }
 	},
 }
 </script>
