@@ -10,8 +10,7 @@
 
 ### Fixed
 - App icon rendering in dark mode
-- Grid view logo rendering
-- Styles tab logo indicator badge accuracy
+- Code integrity signing process
 
 ---
 
