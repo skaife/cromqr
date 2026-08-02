@@ -2,6 +2,10 @@ import { ref } from 'vue'
 import axios from '@nextcloud/axios'
 import { generateUrl } from '@nextcloud/router'
 
+function sortByName(arr) {
+	arr.sort((a, b) => (a.name || '').localeCompare(b.name || '', undefined, { sensitivity: 'base' }))
+}
+
 export function useLibrary() {
 	const entries = ref([])
 	const loading = ref(false)
@@ -12,6 +16,7 @@ export function useLibrary() {
 			const url = generateUrl('/apps/cromqr/library')
 			const response = await axios.get(url)
 			entries.value = response.data
+			sortByName(entries.value)
 		} catch (error) {
 			console.error('Failed to fetch library', error)
 			entries.value = []
@@ -24,7 +29,8 @@ export function useLibrary() {
 		try {
 			const url = generateUrl('/apps/cromqr/library')
 			const response = await axios.post(url, data)
-			entries.value.unshift(response.data)
+			entries.value.push(response.data)
+			sortByName(entries.value)
 			return response.data
 		} catch (error) {
 			console.error('Failed to create entry', error)
@@ -40,6 +46,7 @@ export function useLibrary() {
 			if (idx !== -1) {
 				entries.value[idx] = response.data
 			}
+			sortByName(entries.value)
 			return response.data
 		} catch (error) {
 			console.error('Failed to update entry', error)

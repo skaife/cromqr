@@ -1,7 +1,9 @@
 <template>
 	<div class="qr-preview-section">
 		<div class="qr-preview-container">
-			<div v-if="payload" class="qr-preview" v-html="svgContent" />
+			<div v-if="payload || showPlaceholder" class="qr-preview">
+				<canvas ref="canvasRef" width="256" height="256" />
+			</div>
 			<div v-else class="qr-placeholder">
 				{{ t('cromqr', 'Enter data to generate a QR code') }}
 			</div>
@@ -17,53 +19,103 @@
 				<input type="color" :value="bgColor" @input="$emit('update:bgColor', $event.target.value)">
 			</label>
 		</div>
+
+		<LogoPicker
+			:logo-path="logoPath"
+			@update:logo-path="$emit('update:logoPath', $event)"
+			@logo-loaded="onLogoLoaded" />
 	</div>
 </template>
 
 <script>
-import { ref, watch } from 'vue'
+import { ref, watch, nextTick } from 'vue'
 import { t } from '@nextcloud/l10n'
 import QRCode from 'qrcode'
+import LogoPicker from './LogoPicker.vue'
 
 export default {
 	name: 'QrPreview',
+	components: { LogoPicker },
 	props: {
 		payload: { type: String, default: '' },
 		fgColor: { type: String, default: '#000000' },
 		bgColor: { type: String, default: '#ffffff' },
+		logoPath: { type: String, default: null },
+		showPlaceholder: { type: Boolean, default: false },
 	},
-	emits: ['update:fgColor', 'update:bgColor'],
+	emits: ['update:fgColor', 'update:bgColor', 'update:logoPath'],
 	setup(props) {
-		const svgContent = ref('')
+		const canvasRef = ref(null)
+		const logoImage = ref(null)
 		let debounceTimer = null
 
-		function generate() {
-			if (!props.payload) {
-				svgContent.value = ''
+		function onLogoLoaded(objectUrl) {
+			if (!objectUrl) {
+				logoImage.value = null
+				render()
 				return
 			}
-			clearTimeout(debounceTimer)
-			debounceTimer = setTimeout(async () => {
-				try {
-					svgContent.value = await QRCode.toString(props.payload, {
-						type: 'svg',
-						width: 256,
-						margin: 2,
-						color: {
-							dark: props.fgColor,
-							light: props.bgColor,
-						},
-						errorCorrectionLevel: 'M',
-					})
-				} catch {
-					svgContent.value = ''
-				}
-			}, 300)
+			const img = new Image()
+			img.onload = () => {
+				logoImage.value = img
+				render()
+			}
+			img.onerror = () => {
+				logoImage.value = null
+				render()
+			}
+			img.src = objectUrl
 		}
 
-		watch(() => [props.payload, props.fgColor, props.bgColor], generate, { immediate: true })
+		function render() {
+			clearTimeout(debounceTimer)
+			debounceTimer = setTimeout(() => doRender(), 300)
+		}
 
-		return { svgContent, t }
+		async function doRender() {
+			const canvas = canvasRef.value
+			if (!canvas) return
+
+			const text = props.payload || (props.showPlaceholder ? 'CromQR' : '')
+			if (!text) {
+				const ctx = canvas.getContext('2d')
+				ctx.clearRect(0, 0, 256, 256)
+				return
+			}
+
+			const ecLevel = logoImage.value ? 'H' : 'M'
+
+			try {
+				await QRCode.toCanvas(canvas, text, {
+					width: 256,
+					margin: 2,
+					color: {
+						dark: props.fgColor,
+						light: props.bgColor,
+					},
+					errorCorrectionLevel: ecLevel,
+				})
+
+				if (logoImage.value) {
+					const ctx = canvas.getContext('2d')
+					const logoSize = Math.round(256 * 0.2)
+					const x = Math.round((256 - logoSize) / 2)
+					const y = Math.round((256 - logoSize) / 2)
+					const pad = 4
+					ctx.fillStyle = '#ffffff'
+					ctx.fillRect(x - pad, y - pad, logoSize + pad * 2, logoSize + pad * 2)
+					ctx.drawImage(logoImage.value, x, y, logoSize, logoSize)
+				}
+			} catch {
+				// invalid payload
+			}
+		}
+
+		watch(() => [props.payload, props.fgColor, props.bgColor, props.showPlaceholder], () => {
+			nextTick(render)
+		}, { immediate: true })
+
+		return { canvasRef, onLogoLoaded, t }
 	},
 }
 </script>
@@ -84,7 +136,7 @@ export default {
 	height: 256px;
 }
 
-.qr-preview :deep(svg) {
+.qr-preview canvas {
 	width: 100%;
 	height: 100%;
 }

@@ -1,5 +1,20 @@
 # Changelog
 
+## v1.1.0 — 2026-08-02
+
+### Added
+- Saved styles: create, edit, and reuse QR code style presets (colors, logo)
+- Logo embedding: overlay a logo from Nextcloud Files onto QR codes
+- Folders: organize library entries into folders
+- Recently Deleted panel with restore and empty-trash for library items and styles
+
+### Fixed
+- App icon rendering in dark mode
+- Grid view logo rendering
+- Styles tab logo indicator badge accuracy
+
+---
+
 ## v1.0.2 — 2026-07-16
 
 ### Added

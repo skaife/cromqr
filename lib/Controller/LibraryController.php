@@ -74,4 +74,31 @@ class LibraryController extends Controller {
 		}
 		return new JSONResponse(['status' => 'deleted']);
 	}
+
+	/**
+	 * @NoAdminRequired
+	 */
+	public function deleted(): JSONResponse {
+		$entries = $this->service->findDeleted($this->userId);
+		return new JSONResponse($entries);
+	}
+
+	/**
+	 * @NoAdminRequired
+	 */
+	public function restore(string $id): JSONResponse {
+		$entry = $this->service->restore($id, $this->userId);
+		if ($entry === null) {
+			return new JSONResponse(['error' => 'Not found'], 404);
+		}
+		return new JSONResponse($entry);
+	}
+
+	/**
+	 * @NoAdminRequired
+	 */
+	public function emptyTrash(): JSONResponse {
+		$count = $this->service->emptyTrash($this->userId);
+		return new JSONResponse(['status' => 'emptied', 'count' => $count]);
+	}
 }

@@ -14,19 +14,28 @@
 				:payload="payload"
 				:fg-color="style.fgColor"
 				:bg-color="style.bgColor"
+				:logo-path="style.logo"
+				:show-placeholder="stylesMode && !payload"
 				@update:fg-color="val => style.fgColor = val"
-				@update:bg-color="val => style.bgColor = val" />
+				@update:bg-color="val => style.bgColor = val"
+				@update:logo-path="val => style.logo = val" />
 
 			<ActionBar
 				:is-saved="isSaved"
 				:has-payload="!!payload"
+				:has-logo="!!style.logo"
 				:name="name"
+				:styles-mode="stylesMode"
+				:is-plain-style="isPlainStyle"
 				@save="onSave"
 				@export="onExport"
 				@download-svg="onDownloadSvg"
 				@download-png="onDownloadPng"
 				@delete="onDelete"
-				@update:name="val => name = val" />
+				@update:name="val => name = val"
+				@save-new-style="$emit('save-new-style', currentStyleData)"
+				@update-style="$emit('update-style', currentStyleData)"
+				@delete-style="$emit('delete-style')" />
 		</div>
 	</div>
 </template>
@@ -75,12 +84,15 @@ export default {
 	props: {
 		entry: { type: Object, default: null },
 		isSaved: { type: Boolean, default: false },
+		stylesMode: { type: Boolean, default: false },
+		isPlainStyle: { type: Boolean, default: false },
+		appliedStyle: { type: Object, default: null },
 	},
-	emits: ['save', 'update', 'delete'],
+	emits: ['save', 'update', 'delete', 'save-new-style', 'update-style', 'delete-style'],
 	setup(props, { emit }) {
 		const dataType = ref('url')
 		const fields = ref({})
-		const style = ref({ fgColor: '#000000', bgColor: '#ffffff' })
+		const style = ref({ fgColor: '#000000', bgColor: '#ffffff', logo: null })
 		const name = ref('')
 		const { downloadSvg, downloadPng, generatePngDataUrl } = useQrGenerator()
 		const { exportToFiles } = useExport()
@@ -89,19 +101,40 @@ export default {
 
 		const payload = computed(() => buildPayload(dataType.value, fields.value))
 
+		const currentStyleData = computed(() => ({
+			fgColor: style.value.fgColor,
+			bgColor: style.value.bgColor,
+			logo: style.value.logo,
+		}))
+
 		watch(() => props.entry, (entry) => {
 			if (entry) {
 				dataType.value = entry.dataType || 'url'
 				fields.value = { ...(entry.fields || {}) }
-				style.value = { ...(entry.style || { fgColor: '#000000', bgColor: '#ffffff' }) }
+				style.value = {
+					fgColor: '#000000',
+					bgColor: '#ffffff',
+					logo: null,
+					...(entry.style || {}),
+				}
 				name.value = entry.name || ''
 			} else {
 				dataType.value = 'url'
 				fields.value = {}
-				style.value = { fgColor: '#000000', bgColor: '#ffffff' }
+				style.value = { fgColor: '#000000', bgColor: '#ffffff', logo: null }
 				name.value = ''
 			}
 		}, { immediate: true })
+
+		watch(() => props.appliedStyle, (applied) => {
+			if (applied) {
+				style.value = {
+					fgColor: applied.fgColor || '#000000',
+					bgColor: applied.bgColor || '#ffffff',
+					logo: applied.logo || null,
+				}
+			}
+		})
 
 		function onTypeChange(type) {
 			if (!props.isSaved) {
@@ -118,6 +151,7 @@ export default {
 			const data = {
 				$id: props.entry?.$id || self.crypto?.randomUUID?.() || generateUUID(),
 				name: name.value,
+				folder: props.entry?.folder || '',
 				dataType: dataType.value,
 				payload: payload.value,
 				fields: { ...fields.value },
@@ -161,6 +195,7 @@ export default {
 			name,
 			payload,
 			formComponent,
+			currentStyleData,
 			onTypeChange,
 			onFieldsUpdate,
 			onSave,

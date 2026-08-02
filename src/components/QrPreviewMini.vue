@@ -1,10 +1,13 @@
 <template>
-	<div class="qr-mini" v-html="svgContent" />
+	<div class="qr-mini">
+		<canvas ref="canvasRef" width="80" height="80" />
+	</div>
 </template>
 
 <script>
-import { ref, watch } from 'vue'
+import { ref, watch, nextTick, onBeforeUnmount } from 'vue'
 import QRCode from 'qrcode'
+import { useQrGenerator } from '../composables/useQrGenerator.js'
 
 export default {
 	name: 'QrPreviewMini',
@@ -16,32 +19,54 @@ export default {
 		},
 	},
 	setup(props) {
-		const svgContent = ref('')
+		const canvasRef = ref(null)
+		const { loadLogoImage, drawLogoOnCanvas } = useQrGenerator()
+		let currentLogoUrl = null
 
 		async function generate() {
+			const canvas = canvasRef.value
+			if (!canvas) return
+
 			if (!props.payload) {
-				svgContent.value = ''
+				const ctx = canvas.getContext('2d')
+				ctx.clearRect(0, 0, 80, 80)
 				return
 			}
+
+			const hasLogo = !!props.styleOpts.logo
+
 			try {
-				svgContent.value = await QRCode.toString(props.payload, {
-					type: 'svg',
+				await QRCode.toCanvas(canvas, props.payload, {
 					width: 80,
 					margin: 1,
 					color: {
 						dark: props.styleOpts.fgColor || '#000000',
 						light: props.styleOpts.bgColor || '#ffffff',
 					},
-					errorCorrectionLevel: 'M',
+					errorCorrectionLevel: hasLogo ? 'H' : 'M',
 				})
+
+				if (hasLogo) {
+					const loaded = await loadLogoImage(props.styleOpts.logo)
+					if (loaded) {
+						if (currentLogoUrl) URL.revokeObjectURL(currentLogoUrl)
+						currentLogoUrl = loaded.objectUrl
+						const ctx = canvas.getContext('2d')
+						drawLogoOnCanvas(ctx, loaded.img, 80)
+					}
+				}
 			} catch {
-				svgContent.value = ''
+				// invalid payload
 			}
 		}
 
-		watch(() => [props.payload, props.styleOpts], generate, { immediate: true, deep: true })
+		watch(() => [props.payload, props.styleOpts], () => nextTick(generate), { immediate: true, deep: true })
 
-		return { svgContent }
+		onBeforeUnmount(() => {
+			if (currentLogoUrl) URL.revokeObjectURL(currentLogoUrl)
+		})
+
+		return { canvasRef }
 	},
 }
 </script>
@@ -52,7 +77,7 @@ export default {
 	height: 80px;
 }
 
-.qr-mini :deep(svg) {
+.qr-mini canvas {
 	width: 100%;
 	height: 100%;
 }
