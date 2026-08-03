@@ -1,6 +1,6 @@
 # Changelog
 
-## v1.1.0 — 2026-08-02
+## v1.1.1 — 2026-08-02
 
 ### Added
 - Saved styles: create, edit, and reuse QR code style presets (colors, logo)
