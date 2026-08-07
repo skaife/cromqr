@@ -38,14 +38,17 @@ export function useQrGenerator() {
 		}
 	}
 
-	function drawLogoOnCanvas(ctx, logoImg, canvasSize) {
-		const logoSize = Math.round(canvasSize * 0.2)
-		const x = Math.round((canvasSize - logoSize) / 2)
-		const y = Math.round((canvasSize - logoSize) / 2)
+	function drawLogoOnCanvas(ctx, logoImg, canvasSize, bgColor) {
+		const boxSize = Math.round(canvasSize * 0.2)
+		const boxX = Math.round((canvasSize - boxSize) / 2)
+		const boxY = Math.round((canvasSize - boxSize) / 2)
 		const pad = 4
-		ctx.fillStyle = '#ffffff'
-		ctx.fillRect(x - pad, y - pad, logoSize + pad * 2, logoSize + pad * 2)
-		ctx.drawImage(logoImg, x, y, logoSize, logoSize)
+		ctx.fillStyle = bgColor || '#ffffff'
+		ctx.fillRect(boxX - pad, boxY - pad, boxSize + pad * 2, boxSize + pad * 2)
+		const scale = Math.min(boxSize / logoImg.naturalWidth, boxSize / logoImg.naturalHeight)
+		const drawW = Math.round(logoImg.naturalWidth * scale)
+		const drawH = Math.round(logoImg.naturalHeight * scale)
+		ctx.drawImage(logoImg, boxX + Math.round((boxSize - drawW) / 2), boxY + Math.round((boxSize - drawH) / 2), drawW, drawH)
 	}
 
 	async function generateSvgString(payload, style) {
@@ -71,7 +74,7 @@ export function useQrGenerator() {
 			const loaded = await loadLogoImage(style.logo)
 			if (loaded) {
 				const ctx = canvas.getContext('2d')
-				drawLogoOnCanvas(ctx, loaded.img, size)
+				drawLogoOnCanvas(ctx, loaded.img, size, style?.bgColor)
 				URL.revokeObjectURL(loaded.objectUrl)
 			}
 		}

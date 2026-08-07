@@ -98,13 +98,16 @@ export default {
 
 				if (logoImage.value) {
 					const ctx = canvas.getContext('2d')
-					const logoSize = Math.round(256 * 0.2)
-					const x = Math.round((256 - logoSize) / 2)
-					const y = Math.round((256 - logoSize) / 2)
+					const boxSize = Math.round(256 * 0.2)
+					const boxX = Math.round((256 - boxSize) / 2)
+					const boxY = Math.round((256 - boxSize) / 2)
 					const pad = 4
-					ctx.fillStyle = '#ffffff'
-					ctx.fillRect(x - pad, y - pad, logoSize + pad * 2, logoSize + pad * 2)
-					ctx.drawImage(logoImage.value, x, y, logoSize, logoSize)
+					ctx.fillStyle = props.bgColor
+					ctx.fillRect(boxX - pad, boxY - pad, boxSize + pad * 2, boxSize + pad * 2)
+					const scale = Math.min(boxSize / logoImage.value.naturalWidth, boxSize / logoImage.value.naturalHeight)
+					const drawW = Math.round(logoImage.value.naturalWidth * scale)
+					const drawH = Math.round(logoImage.value.naturalHeight * scale)
+					ctx.drawImage(logoImage.value, boxX + Math.round((boxSize - drawW) / 2), boxY + Math.round((boxSize - drawH) / 2), drawW, drawH)
 				}
 			} catch {
 				// invalid payload

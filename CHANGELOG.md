@@ -1,5 +1,13 @@
 # Changelog
 
+## v1.1.2 — 2026-08-07
+
+### Fixed
+- Logo now scales to preserve aspect ratio instead of stretching to fill the reserved box (non-square logos no longer render distorted)
+- Logo backfill box now uses the QR code's background color instead of a hardcoded white, so it blends correctly with non-white backgrounds
+
+---
+
 ## v1.1.1 — 2026-08-02
 
 ### Added
