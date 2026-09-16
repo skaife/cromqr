@@ -1,5 +1,13 @@
 # Changelog
 
+## v1.2.0 — 2026-09-16
+
+### Added
+- Enhanced vCard fields: multiple phone numbers (mobile/work/fax), multiple URLs (website/social), organization with department and sub-department, nickname, birthday, and notes
+- Nextcloud 35 compatibility
+
+---
+
 ## v1.1.2 — 2026-08-07
 
 ### Fixed

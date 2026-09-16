@@ -78,7 +78,18 @@ OC.L10N.register(
     "Restore" : "Restore",
     "Empty Trash" : "Empty Trash",
     "Trash is empty" : "Trash is empty",
-    "Are you sure? This will permanently delete all items in the trash." : "Are you sure? This will permanently delete all items in the trash."
+    "Are you sure? This will permanently delete all items in the trash." : "Are you sure? This will permanently delete all items in the trash.",
+    "Add field" : "Add field",
+    "Remove" : "Remove",
+    "Mobile" : "Mobile",
+    "Work" : "Work",
+    "Fax" : "Fax",
+    "Social" : "Social",
+    "Nickname" : "Nickname",
+    "Birthday" : "Birthday",
+    "Note" : "Note",
+    "Department" : "Department",
+    "Sub-department" : "Sub-department"
     },
     "nplurals=2; plural=(n != 1);"
 );

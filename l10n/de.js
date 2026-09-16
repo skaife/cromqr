@@ -78,7 +78,18 @@ OC.L10N.register(
     "Restore" : "Wiederherstellen",
     "Empty Trash" : "Papierkorb leeren",
     "Trash is empty" : "Der Papierkorb ist leer",
-    "Are you sure? This will permanently delete all items in the trash." : "Sind Sie sicher? Alle Einträge im Papierkorb werden endgültig gelöscht."
+    "Are you sure? This will permanently delete all items in the trash." : "Sind Sie sicher? Alle Einträge im Papierkorb werden endgültig gelöscht.",
+    "Add field" : "Feld hinzufügen",
+    "Remove" : "Entfernen",
+    "Mobile" : "Mobil",
+    "Work" : "Arbeit",
+    "Fax" : "Fax",
+    "Social" : "Soziale Medien",
+    "Nickname" : "Spitzname",
+    "Birthday" : "Geburtstag",
+    "Note" : "Notiz",
+    "Department" : "Bereich",
+    "Sub-department" : "Unterbereich"
     },
     "nplurals=2; plural=(n != 1);"
 );
