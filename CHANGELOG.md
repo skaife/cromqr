@@ -1,5 +1,12 @@
 # Changelog
 
+## v1.2.1 — 2026-10-27
+
+### Fixed
+- Fixed app icon rendering as a solid block in recent Nextcloud versions
+
+---
+
 ## v1.2.0 — 2026-09-16
 
 ### Added
